@@ -24,8 +24,8 @@ guessed_states = []
 count = 0
 state_list = data.state.to_list()
 while True:
-    answer_state = screen.textinput(title=f"{count}/{len(data.state)} States Correct", prompt="What's  another state?").title()
-    if answer_state == "Exit":
+    answer_state = screen.textinput(title=f"{count}/{len(data.state)} States Correct", prompt="What's  another state?")
+    if answer_state == "Exit" or answer_state is None:
         missing_states = []
         for state in state_list:
             if state not in guessed_states:
@@ -36,15 +36,17 @@ while True:
         df = pandas.DataFrame(data_dict)
         df.to_csv("states.csv")
         break
-    elif answer_state in state_list:
-        guessed_states.append(answer_state)
+    elif answer_state.title() in state_list:
+        guessed_states.append(answer_state.title())
         count +=1
-        a = data[data['state'] == answer_state]
+        a = data[data['state'] == answer_state.title()]
         t = turtle.Turtle()
         t.penup()
         t.hideturtle()
         # t.goto(float(a.x),float(a.y))
         t.goto(a.x.item(), a.y.item())
-        t.write(a.state.to_list()[0])
+        # t.write(a.state.to_list()[0])
+        # t.goto(a.x.iloc[0], a.y.iloc[0])
+
         t.write(a.state.item())
 
